@@ -1,3 +1,13 @@
 from django.db import models
+from accounts.models import Profile
 
-# Create your models here.
+
+class Doctor(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    specialization = models.CharField(max_length=100)
+    qualification = models.CharField(max_length=255)
+    years_of_experience = models.PositiveIntegerField()
+    license_number = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return f"Dr. {self.profile.first_name} {self.profile.last_name}"
