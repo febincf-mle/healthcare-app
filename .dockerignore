@@ -1,0 +1,8 @@
+venv
+Dockerfile
+src/.env
+src/.env-template
+README.md
+src/db.sqlite3
+.dockerignore
+.gitignore

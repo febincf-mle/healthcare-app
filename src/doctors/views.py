@@ -1,5 +1,6 @@
 import logging
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,7 +20,7 @@ class DoctorListCreateAPIView(APIView):
         doctors = (
             Doctor
             .objects
-            .filter(profile__created_by=request.user)
+            .all()
             .select_related('profile')
             .order_by("-id")
         )
@@ -38,6 +39,9 @@ class DoctorListCreateAPIView(APIView):
         except ValidationError as e:
             logger.warning(f"Validation error while creating doctor by user {request.user}: {e}")
             return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError as e:
+            logger.warning(f"Integrity error while creating doctor by user {request.user}: {e}")
+            return Response({"error": 'Email or Phonenumber already exists'}, status=status.HTTP_400_BAD_REQUEST)    
         except Exception as e:
             logger.error(f"Unexpected error while creating doctor: {e}", exc_info=True)
             return Response({"error": "Something went wrong."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

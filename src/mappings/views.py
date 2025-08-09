@@ -37,18 +37,14 @@ class PatientDoctorMappingListCreateAPIView(APIView):
 class PatientDoctorMappingByPatientAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, patient_id):
+    def get(self, request, pk):
         """Get all doctors assigned to a specific patient."""
         doctors = Doctor.objects.filter(
-            patient_mappings__patient_id=patient_id
+            patient_mappings__patient_id=pk
         ).select_related('profile')
         serializer = DoctorSerializer(doctors, many=True)
         return Response(serializer.data)
-
-
-class PatientDoctorMappingDeleteAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
+    
     def delete(self, request, pk):
         """Remove a doctor from a patient."""
         mapping = get_object_or_404(PatientDoctorMapping, pk=pk)

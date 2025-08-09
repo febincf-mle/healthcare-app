@@ -1,4 +1,6 @@
 from .base import *
+from datetime import timedelta
+
 
 # Allow all hosts for development.
 ALLOWED_HOSTS = ['*']
@@ -11,4 +13,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR.parent / 'db.sqlite3',
     }
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20)
 }

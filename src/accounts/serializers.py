@@ -23,12 +23,32 @@ class RegisterSerializer(serializers.ModelSerializer):
     
 
 class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(validators=[])
+    phone_number = serializers.CharField(validators=[])
+
     class Meta:
         model = Profile
         fields = [
             "first_name", "last_name", "email", "phone_number",
             "gender", "age", "date_of_birth", "address"
         ]
+    
+    def validate_email(self, value):
+        if self.instance and self.instance.email == value:
+            print(self.instance, "This is the self.instance you wanted bitch")
+            return value
+
+        if Profile.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
+
+    def validate_phone_number(self, value):
+        if self.instance and self.instance.phone_number == value:
+            return value
+
+        if Profile.objects.filter(phone_number=value).exists():
+            raise serializers.ValidationError("This phone number is already in use.")
+        return value
     
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -42,4 +62,3 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Replace 'username' with 'email'
         attrs['username'] = attrs.get('email')
         return super().validate(attrs)
-    
