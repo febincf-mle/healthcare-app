@@ -1,5 +1,6 @@
 venv
 Dockerfile
+staticfiles
 src/.env
 src/.env-template
 README.md

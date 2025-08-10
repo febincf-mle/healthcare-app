@@ -54,6 +54,7 @@ ARG PROJ_NAME="config"
 # Create a startup script to wait for DB & run the app
 RUN printf "#!/bin/bash\n" > ./paracord_runner.sh && \
     printf "RUN_PORT=\"\${PORT:-8000}\"\n" >> ./paracord_runner.sh && \
+    printf "python manage.py collectstatic --noinput\n" >> ./paracord_runner.sh && \
     printf "echo 'Running migrations...'\n" >> ./paracord_runner.sh && \
     printf "python manage.py migrate\n\n" >> ./paracord_runner.sh && \
     printf "echo 'Starting Gunicorn...'\n" >> ./paracord_runner.sh && \

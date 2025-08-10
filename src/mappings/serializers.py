@@ -18,4 +18,4 @@ class PatientDoctorMappingReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientDoctorMapping
         fields = ['id', 'patient', 'doctor', 'assigned_at']
-        read_only_fields = "__all__"
+        read_only_fields = fields
